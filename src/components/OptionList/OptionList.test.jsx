@@ -36,12 +36,11 @@ test("scoops", async () => {
   expect(total).toHaveTextContent("6.00");
 
   await user.clear(vanillaInput);
+
   await user.clear(chocolateInput);
   await user.type(chocolateInput, "11");
   expect(total).toHaveTextContent("0.00");
 
-  await user.clear(vanillaInput);
-  await user.type(vanillaInput, "1");
   await user.clear(chocolateInput);
   await user.type(chocolateInput, "-1");
   expect(total).toHaveTextContent("0.00");
@@ -74,4 +73,10 @@ test("toppings", async () => {
   });
   await user.click(fudgeInput);
   expect(total).toHaveTextContent("3.00");
+
+  await user.click(cherriesInput);
+  expect(total).toHaveTextContent("1.50");
+
+  await user.click(fudgeInput);
+  expect(total).toHaveTextContent("0.00");
 });

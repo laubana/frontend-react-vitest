@@ -24,14 +24,23 @@ export default ({ optionType }) => {
 
   useEffect(() => {
     const main = async () => {
+      const controller = new AbortController();
+
       try {
-        const response = await axios.get(`http://localhost:5000/${optionType}`);
+        const response = await axios.get(
+          `http://localhost:4000/${optionType}`,
+          { signal: controller.signal }
+        );
 
         setOptions(response.data);
       } catch (error) {
         console.error(error);
 
         setError(error.message);
+      } finally {
+        return () => {
+          controller.abort();
+        };
       }
     };
     main();

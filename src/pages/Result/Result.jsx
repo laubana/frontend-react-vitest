@@ -17,7 +17,7 @@ export default () => {
   useEffect(() => {
     const main = async () => {
       try {
-        const response = await axios.post("http://localhost:5000/order");
+        const response = await axios.post("http://localhost:4000/order");
 
         setOrderCode(response.data.orderNumber);
       } catch (error) {

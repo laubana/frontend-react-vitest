@@ -20,7 +20,7 @@ export default () => {
       <OptionList optionType="scoops" />
       <OptionList optionType="toppings" />
       <h2>
-        Grand total: {formatCurrency(totalPrices.scoops + totalPrices.toppings)}
+        Grand Total: {formatCurrency(totalPrices.scoops + totalPrices.toppings)}
       </h2>
       <Button onClick={handleNext} disabled={totalPrices.scoops === 0}>
         Next

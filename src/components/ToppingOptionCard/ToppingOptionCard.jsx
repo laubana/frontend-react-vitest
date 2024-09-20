@@ -14,7 +14,7 @@ export default ({ name, image }) => {
     <Col xs={6} sm={4} md={3} lg={2} style={{ textAlign: "center" }}>
       <img
         style={{ width: "75%" }}
-        src={`http://localhost:5000/${image}`}
+        src={`http://localhost:4000/${image}`}
         alt={`${name} topping`}
       />
       <Form.Group controlId={`${name}-topping-checkbox`}>
