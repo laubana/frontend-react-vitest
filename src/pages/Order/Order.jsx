@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import OptionList from "../../components/OptionList";
 import { useOrderContext } from "../../contexts/OrderContext";
-import { formatCurrency } from "../../helpers/helpers";
+import { formatCurrency } from "../../helpers/format";
 
 export default () => {
   const navigate = useNavigate();

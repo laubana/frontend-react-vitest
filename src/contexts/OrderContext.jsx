@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 
-import { prices } from "../constants";
+import { prices } from "../consts";
 
 const OrderContext = createContext();
 
@@ -10,7 +10,7 @@ const OrderContextProvider = ({ children }) => {
     toppings: {},
   });
 
-  const updateOptionCount = (type, name, count) => {
+  const setOptionCount = (type, name, count) => {
     setOptionCounts((prevStates) => ({
       ...prevStates,
       [type]: { ...prevStates[type], [name]: count },
@@ -37,7 +37,7 @@ const OrderContextProvider = ({ children }) => {
 
   return (
     <OrderContext.Provider
-      value={{ totalPrices, optionCounts, updateOptionCount, resetOrderCounts }}
+      value={{ totalPrices, optionCounts, setOptionCount, resetOrderCounts }}
     >
       {children}
     </OrderContext.Provider>

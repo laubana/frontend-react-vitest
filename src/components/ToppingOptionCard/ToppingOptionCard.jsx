@@ -1,20 +1,20 @@
 import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
+import { Form } from "react-bootstrap";
 
 import { useOrderContext } from "../../contexts/OrderContext";
 
 export default ({ name, image }) => {
-  const { optionCounts, updateOptionCount } = useOrderContext();
+  const { optionCounts, setOptionCount } = useOrderContext();
 
   const handleChange = (event) => {
-    updateOptionCount("toppings", name, event.target.checked ? 1 : 0);
+    setOptionCount("toppings", name, event.target.checked ? 1 : 0);
   };
 
   return (
     <Col xs={6} sm={4} md={3} lg={2} style={{ textAlign: "center" }}>
       <img
         style={{ width: "75%" }}
-        src={`http://localhost:4000/${image}`}
+        src={`${import.meta.env.VITE_BACKEND_URL}/${image}`}
         alt={`${name} topping`}
       />
       <Form.Group controlId={`${name}-topping-checkbox`}>

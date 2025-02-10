@@ -1,9 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Button from "react-bootstrap/Button";
+import { Alert, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
-import Alert from "../../components/Alert/Alert";
 import { useOrderContext } from "../../contexts/OrderContext";
 
 export default () => {
@@ -17,9 +16,11 @@ export default () => {
   useEffect(() => {
     const main = async () => {
       try {
-        const response = await axios.post("http://localhost:4000/order");
+        const response = await axios.post(
+          `${import.meta.env.VITE_BACKEND_URL}/order`
+        );
 
-        setOrderCode(response.data.orderNumber);
+        setOrderCode(response.data.data.orderNumber);
       } catch (error) {
         console.error(error);
 
@@ -32,22 +33,26 @@ export default () => {
   const handleClick = () => {
     resetOrderCounts();
 
-    navigate("/order");
+    navigate("/");
   };
 
-  const mainButton = <Button onClick={handleClick}>Go to Main</Button>;
-
   if (error) {
-    return <Alert button={mainButton} message={error} variant={null} />;
+    return (
+      <Alert variant="danger">
+        <div>{error}</div>
+        <div style={{ textAlign: "center" }}>
+          <Button onClick={handleClick}>Go to Main</Button>
+        </div>
+      </Alert>
+    );
   }
 
   if (orderCode) {
     return (
       <div style={{ textAlign: "center" }}>
         <h1>Thank You!</h1>
-        <p>Your order number is {orderCode}</p>
-        <p>As per our terms and conditions, nothing will happen now</p>
-        {mainButton}
+        <p>Your order number is {orderCode}.</p>
+        <Button onClick={handleClick}>Go to Main</Button>
       </div>
     );
   } else {

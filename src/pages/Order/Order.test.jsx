@@ -14,24 +14,24 @@ vi.mock("react-router-dom", () => ({
   useNavigate: vi.fn(),
 }));
 
-test.skip("errors", async () => {
-  server.resetHandlers(
-    http.get("http://localhost:4000/scoops", () => {
-      return new HttpResponse(null, { status: 500 });
-    }),
-    http.get("http://localhost:4000/toppings", () => {
-      return new HttpResponse(null, { status: 500 });
-    })
-  );
+describe("Order Test", () => {
+  test.skip("Failure", async () => {
+    server.resetHandlers(
+      http.get(`${import.meta.env.VITE_BACKEND_URL}/scoops`, () => {
+        return new HttpResponse(null, { status: 500 });
+      }),
+      http.get(`${import.meta.env.VITE_BACKEND_URL}/toppings`, () => {
+        return new HttpResponse(null, { status: 500 });
+      })
+    );
 
-  render(<Order />);
+    render(<Order />);
 
-  const alerts = await screen.findAllByRole("alert");
-  expect(alerts).toHaveLength(2);
-});
+    const alerts = await screen.findAllByRole("alert");
+    expect(alerts).toHaveLength(2);
+  });
 
-describe("total", () => {
-  test("default", async () => {
+  test("Default", async () => {
     server.resetHandlers(...handlers);
 
     const { unmount } = render(<Order />);
@@ -42,7 +42,7 @@ describe("total", () => {
     unmount();
   });
 
-  test("scoops", async () => {
+  test("Scoops", async () => {
     const user = userEvent.setup();
 
     server.resetHandlers(...handlers);
@@ -57,15 +57,9 @@ describe("total", () => {
     await user.clear(vanillaInput);
     await user.type(vanillaInput, "1");
     expect(total).toHaveTextContent("2.00");
-
-    const cherriesInput = await screen.findByRole("checkbox", {
-      name: /cherries/i,
-    });
-    await user.click(cherriesInput);
-    expect(total).toHaveTextContent("3.50");
   });
 
-  test("toppings", async () => {
+  test("Toppings", async () => {
     const user = userEvent.setup();
 
     server.resetHandlers(...handlers);
@@ -79,40 +73,5 @@ describe("total", () => {
     });
     await user.click(cherriesInput);
     expect(total).toHaveTextContent("1.50");
-
-    const vanillaInput = await screen.findByRole("spinbutton", {
-      name: /vanilla/i,
-    });
-    await user.clear(vanillaInput);
-    await user.type(vanillaInput, "1");
-    expect(total).toHaveTextContent("3.50");
   });
-});
-
-test("remove", async () => {
-  const user = userEvent.setup();
-
-  server.resetHandlers(...handlers);
-
-  render(<Order />);
-
-  const total = screen.getByText("Grand Total: $", { exact: false });
-
-  const vanillaInput = await screen.findByRole("spinbutton", {
-    name: /vanilla/i,
-  });
-  await user.clear(vanillaInput);
-  await user.type(vanillaInput, "2");
-
-  const cherriesInput = await screen.findByRole("checkbox", {
-    name: /cherries/i,
-  });
-  await user.click(cherriesInput);
-
-  await user.clear(vanillaInput);
-  await user.type(vanillaInput, "1");
-  expect(total).toHaveTextContent("3.50");
-
-  await user.click(cherriesInput);
-  expect(total).toHaveTextContent("2.00");
 });

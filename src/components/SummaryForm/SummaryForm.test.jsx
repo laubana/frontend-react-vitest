@@ -11,41 +11,43 @@ vi.mock("react-router-dom", () => ({
   useNavigate: vi.fn(),
 }));
 
-test("checkbox", async () => {
-  const user = userEvent.setup();
+describe("SumaryForm Test", () => {
+  test("Checkbox", async () => {
+    const user = userEvent.setup();
 
-  render(<SummaryForm />);
+    render(<SummaryForm />);
 
-  const checkbox = screen.getByRole("checkbox", {
-    name: /terms and conditions/i,
+    const checkbox = screen.getByRole("checkbox", {
+      name: /terms and conditions/i,
+    });
+    expect(checkbox).not.toBeChecked();
+
+    const button = screen.getByRole("button", { name: /confirm/i });
+    expect(button).not.toBeEnabled();
+
+    await user.click(checkbox);
+    expect(button).toBeEnabled();
+
+    await user.click(checkbox);
+    expect(button).not.toBeEnabled();
   });
-  expect(checkbox).not.toBeChecked();
 
-  const button = screen.getByRole("button", { name: /confirm/i });
-  expect(button).not.toBeEnabled();
+  test("Popover", async () => {
+    const user = userEvent.setup();
 
-  await user.click(checkbox);
-  expect(button).toBeEnabled();
+    render(<SummaryForm />);
 
-  await user.click(checkbox);
-  expect(button).not.toBeEnabled();
-});
+    const unexistingPopover = screen.queryByText(
+      /no sundae will actually be delivered./i
+    );
+    expect(unexistingPopover).not.toBeInTheDocument();
 
-test("popover", async () => {
-  const user = userEvent.setup();
+    const trigger = screen.getByText(/terms and conditions/i);
+    await user.hover(trigger);
 
-  render(<SummaryForm />);
-
-  const unexistingPopover = screen.queryByText(
-    /no ice cream will actually be delivered/i
-  );
-  expect(unexistingPopover).not.toBeInTheDocument();
-
-  const trigger = screen.getByText(/terms and conditions/i);
-  await user.hover(trigger);
-
-  const existingPopover = screen.getByRole("tooltip", {
-    name: /no ice cream will actually be delivered/i,
+    const existingPopover = screen.getByRole("tooltip", {
+      name: /no sundae will actually be delivered./i,
+    });
+    expect(existingPopover).toBeInTheDocument();
   });
-  expect(existingPopover).toBeInTheDocument();
 });

@@ -1,15 +1,15 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Row from "react-bootstrap/Row";
+import { Alert, Row } from "react-bootstrap";
 
-import Alert from "../Alert/Alert";
 import ScoopOptionCard from "../ScoopOptionCard";
 import ToppingOptionCard from "../ToppingOptionCard";
-import { prices } from "../../constants";
-import { useOrderContext } from "../../contexts/OrderContext";
-import { formatCurrency } from "../../helpers/helpers";
 
-const OptionCardMap = {
+import { prices } from "../../consts";
+import { useOrderContext } from "../../contexts/OrderContext";
+import { formatCurrency } from "../../helpers/format";
+
+const OPTION_CARDS = {
   scoops: ScoopOptionCard,
   toppings: ToppingOptionCard,
 };
@@ -28,11 +28,11 @@ export default ({ optionType }) => {
 
       try {
         const response = await axios.get(
-          `http://localhost:4000/${optionType}`,
+          `${import.meta.env.VITE_BACKEND_URL}/${optionType}`,
           { signal: controller.signal }
         );
 
-        setOptions(response.data);
+        setOptions(response.data.data);
       } catch (error) {
         console.error(error);
 
@@ -47,14 +47,10 @@ export default ({ optionType }) => {
   }, [optionType]);
 
   if (error) {
-    return <Alert message={error} />;
+    return <Alert variant="danger">{error}</Alert>;
   }
 
-  const OptionCard = OptionCardMap[optionType];
-
-  const optionCards = options.map((option) => (
-    <OptionCard key={option.name} name={option.name} image={option.imagePath} />
-  ));
+  const OptionCard = OPTION_CARDS[optionType];
 
   return (
     <>
@@ -63,7 +59,15 @@ export default ({ optionType }) => {
       <p>
         {title} Total: {formatCurrency(totalPrices[optionType])}
       </p>
-      <Row>{optionCards}</Row>
+      <Row>
+        {options.map((option) => (
+          <OptionCard
+            key={option.name}
+            name={option.name}
+            image={option.imageUrl}
+          />
+        ))}
+      </Row>
     </>
   );
 };

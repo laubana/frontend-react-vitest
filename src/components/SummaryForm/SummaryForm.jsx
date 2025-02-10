@@ -1,8 +1,5 @@
 import { useState } from "react";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Popover from "react-bootstrap/Popover";
+import { Button, Form, OverlayTrigger, Popover } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 export default () => {
@@ -18,7 +15,7 @@ export default () => {
 
   const popover = (
     <Popover id="popover-basic">
-      <Popover.Body>No ice cream will actually be delivered</Popover.Body>
+      <Popover.Body>No sundae will actually be delivered.</Popover.Body>
     </Popover>
   );
 
@@ -28,6 +25,7 @@ export default () => {
       <OverlayTrigger placement="right" overlay={popover}>
         <span style={{ color: "blue" }}> Terms and Conditions</span>
       </OverlayTrigger>
+      .
     </span>
   );
 

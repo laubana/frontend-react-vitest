@@ -1,12 +1,10 @@
 import { useState } from "react";
-import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
+import { Col, Form, Row } from "react-bootstrap";
 
 import { useOrderContext } from "../../contexts/OrderContext";
 
 export default ({ name, image }) => {
-  const { optionCounts, updateOptionCount } = useOrderContext();
+  const { optionCounts, setOptionCount } = useOrderContext();
 
   const [isInvalid, setIsInvalid] = useState(false);
 
@@ -16,16 +14,15 @@ export default ({ name, image }) => {
     const isValid = 0 <= value && value <= 10 && +event.target.value === value;
 
     setIsInvalid(!isValid);
-
-    updateOptionCount("scoops", name, isValid ? value : 0);
+    setOptionCount("scoops", name, isValid ? value : 0);
   };
 
   return (
     <Col xs={12} sm={6} md={4} lg={3} style={{ textAlign: "center" }}>
       <img
-        style={{ width: "75%" }}
-        src={`http://localhost:4000/${image}`}
+        src={`${import.meta.env.VITE_BACKEND_URL}/${image}`}
         alt={`${name} scoop`}
+        style={{ width: "75%" }}
       />
       <Form.Group
         controlId={`${name}-count`}
